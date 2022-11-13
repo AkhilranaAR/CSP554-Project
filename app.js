@@ -4,6 +4,12 @@ const path = require("path");
 // console.dir(app);
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
+const bodyParser = require('body-parser');
+const crypto = require('crypto');
+const multer = require('multer');
+const GridFsStorage = require('multer-gridfs-storage');
+const Grid = require('gridfs-stream');
+
 
 // Starting mongod:
 // brew services start mongodb-community@5.0
