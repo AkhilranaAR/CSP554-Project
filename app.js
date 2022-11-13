@@ -5,14 +5,35 @@ const path = require("path");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 
-mongoose.connect('mongodb://localhost:27017/farmerMarket_errorSection', { useNewUrlParser: true })
-    .then(() => {
-        console.log("Mongo connection is active.");
-    })
+// Starting mongod:
+// brew services start mongodb-community@5.0
+// brew services stop mongodb-community@5.0
+// brew services list
+// mongosh
+
+// Connecting to mongod through mongoose:
+mongoose.connect('mongodb://localhost:27017/grid_fs', {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+})
+    // .then(() => {
+    //     console.log("Mongo connection is active.");
+    // })
     .catch((err) => {
-        console.log("Error in Mongo connection.", err);
+        console.log("Error in initial Mongod connection.", err);
         // console.log(err);
     })
+
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "Connection error:"));
+db.once("open", () => {
+    console.log("Database connection in ACTIVE");
+});
+// The .on() is Node.js thing and not specifically mongoose thing.
+// Both .on and .once are attached to listenerEvents().
+
+
 
 app.set("view engine", "ejs");
 // Setting the "views" folder path.
@@ -27,6 +48,7 @@ app.use(express.json());
 
 app.use(methodOverride("_method"));
 // Middleware for the method-override package.
+// One of the 3 ways to use method-override package for HTTP requests.
 
 
 // wrapAsync function:
@@ -40,6 +62,8 @@ function wrapAsync(fn) {
 // The wrapAsync() function to handle the Async errors without the try/catch block
 // for every route handler.
 
+
+// ROUTES:
 app.get("/files/:id2", wrapAsync(async (req, res, next) => {
     // console.log(req.params);
     const { id } = req.params;
@@ -80,7 +104,7 @@ app.get("/files/:id2", wrapAsync(async (req, res, next) => {
 
 
 
-
+// Connection to port 8081:
 app.listen(8081, () => {
     console.log(`Express connection is ACTIVE`);
 });
