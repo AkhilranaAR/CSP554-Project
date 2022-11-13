@@ -14,7 +14,6 @@ const methodOverride = require("method-override");
 // Connecting to mongod through mongoose:
 mongoose.connect('mongodb://localhost:27017/grid_fs', {
     useNewUrlParser: true,
-    useCreateIndex: true,
     useUnifiedTopology: true
 })
     // .then(() => {
@@ -96,9 +95,14 @@ app.get("/files/:id2", wrapAsync(async (req, res, next) => {
 }));
 
 
+app.get("/file_uploads", (req, res) => {
+    res.render("index.ejs");
+})
 
 
-
+app.get("/", (req, res) => {
+    res.render("test.ejs");
+})
 
 
 
@@ -106,5 +110,6 @@ app.get("/files/:id2", wrapAsync(async (req, res, next) => {
 
 // Connection to port 8081:
 app.listen(8081, () => {
-    console.log(`Express connection is ACTIVE`);
+    console.log("8081: ACTIVE");
+    console.log(`Express server at 8081 is up and running.`);
 });
