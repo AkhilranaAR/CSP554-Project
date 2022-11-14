@@ -10,17 +10,30 @@
     <title>TEST EJS FILE</title>
 </head>
 
-<body class="d-flex flex-column vh-100">
+<body class="d-flex flex-column vh-100" style="background-color: #f6f5f3;">
+
+    <div class="container bg-warning p-2 text-dark bg-opacity-10">
+        <header class="d-flex py-3 justify-content-md-between border-bottom border-danger border-1">
+            <!-- justify-content-center -->
+            <p class="text-start fs-3 fw-light">CSP 554</p>
+            <p class="text-center fs-3 fw-light">Big Data Technologies</p>
+            <p class="text-end fs-3 fw-light">Term Project</p>
+        </header>
+    </div>
 
     <div class="container mt-4">
 
         <!-- <h1>Test .ejs file</h1> -->
 
         <div class="row">
-            <h1 class="text-center">Test.ejs file</h1>
-            <div class="col-6 offest-3">
+            <h1 class="text-center mb-5">Test.ejs file</h1>
+
+            <div class="col-6 offest-3 shadow p-3 mb-5 bg-white rounded">
+                <!-- border border-dark rounded -->
+
+
                 <form action="" method="POST" novalidate class="needs-validation">
-                    <div class="mb-3 mt-5">
+                    <div class="mb-3 mt-5 form-group">
                         <label for="title" class="form-label">Enter the Document's name: </label>
                         <input type="text" id="title" class="form-control" placeholder="Enter Name"
                             name="campground[title]" required>
@@ -29,7 +42,7 @@
                         </div>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-3 form-group">
                         <label for="campDescription" class="form-label">Enter the Document's Description: </label>
                         <textarea type="text" id="campDescription" class="form-control" placeholder="Enter Description"
                             name="campground[description]" rows="3" required></textarea>
@@ -38,11 +51,17 @@
                         </div>
                     </div>
 
+                    <div class="mb-3 form-group">
+                        <label for="formControlFile1" class="form-label">Upload Document: </label>
+                        <input type="file" class="form-control-file" id="formControlFile1">
+                    </div>
+
                     <button type="submit" class="btn btn-primary mb-3">Submit</button>
 
                 </form>
 
-                <button type="button" onclick="window.location.href='/campgrounds';" class="btn btn-warning">Back to All
+                <button type="button" onclick="window.location.href='/campgrounds';" class="btn btn-warning">Back to
+                    All
                     Documents</button>
 
             </div>

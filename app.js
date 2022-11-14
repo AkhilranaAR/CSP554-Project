@@ -9,6 +9,8 @@ const crypto = require('crypto');
 const multer = require('multer');
 const GridFsStorage = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
+// const Terminal = require("xterm");
+
 
 
 // Starting mongod:
@@ -110,7 +112,9 @@ app.get("/", (req, res) => {
     res.render("test.ejs");
 })
 
-
+app.get("/test_terminal", (req, res) => {
+    res.render("testTerminal.ejs");
+})
 
 
 
