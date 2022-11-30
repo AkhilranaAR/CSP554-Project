@@ -36,9 +36,36 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "Connection error:"));
 db.once("open", () => {
     console.log("Database connection in ACTIVE");
+    console.log("Initializing GridFS Stream: ")
+    let gfs = Grid(conn.db, mongoose.mongo);
+    gfs.collection("uploads");
 });
 // The .on() is Node.js thing and not specifically mongoose thing.
 // Both .on and .once are attached to listenerEvents().
+
+
+// Initializing storage engine by multer-gridfs-storage:
+const storage = new GridFsStorage({
+    url: 'mongodb://localhost:27017/grid_fs',
+    file: (req, file) => {
+        return new Promise((resolve, reject) => {
+            crypto.randomBytes(16, (err, buf) => {
+                if (err) {
+                    return reject(err);
+                }
+                const filename = buf.toString('hex') + path.extname(file.originalname);
+                const fileInfo = {
+                    filename: filename,
+                    // The bucket name should match the collection name:
+                    bucketName: 'uploads'
+                };
+                resolve(fileInfo);
+            });
+        });
+    }
+});
+const upload = multer({ storage });
+
 
 
 
@@ -53,9 +80,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // Parsing middleware for POST requests.
 
+app.use(bodyParser.json());
+
+// MongoURI:
+// const mongoURI = "mongodb://localhost:27017/grid_fs";
+
 app.use(methodOverride("_method"));
 // Middleware for the method-override package.
-// One of the 3 ways to use method-override package for HTTP requests.
+// One of the 3 ways to use method-override (like delete) package for HTTP requests.
 
 
 // wrapAsync function:
