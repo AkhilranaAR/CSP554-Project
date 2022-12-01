@@ -7,7 +7,7 @@ const methodOverride = require("method-override");
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const multer = require('multer');
-const GridFsStorage = require('multer-gridfs-storage');
+const { GridFsStorage } = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
 // const Terminal = require("xterm");
 
@@ -142,6 +142,10 @@ app.get("/file_uploads", (req, res) => {
 
 app.get("/", (req, res) => {
     res.render("test.ejs");
+})
+
+app.post("/upload", upload.single("doc"), (req, res) => {
+    res.json({ file: req.file });
 })
 
 app.get("/test_terminal", (req, res) => {
