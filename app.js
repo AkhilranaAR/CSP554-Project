@@ -32,19 +32,24 @@ mongoose.connect('mongodb://localhost:27017/grid_fs', {
         // console.log(err);
     })
 
+
+// For global scope:
+let gfs;
+
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "Connection error:"));
 db.once("open", () => {
     console.log("Database connection in ACTIVE");
+    // Initializing GridFS Stream:
     console.log("Initializing GridFS Stream: ")
-    let gfs = Grid(conn.db, mongoose.mongo);
+    gfs = Grid(db.db, mongoose.mongo);
     gfs.collection("uploads");
 });
 // The .on() is Node.js thing and not specifically mongoose thing.
 // Both .on and .once are attached to listenerEvents().
 
 
-// Initializing storage engine by multer-gridfs-storage:
+// Initializing storage engine by multer-gridfs-storage :
 const storage = new GridFsStorage({
     url: 'mongodb://localhost:27017/grid_fs',
     file: (req, file) => {
@@ -140,6 +145,10 @@ app.get("/file_uploads", (req, res) => {
 })
 
 
+
+
+
+// Testing routes:
 app.get("/", (req, res) => {
     res.render("test.ejs");
 })
@@ -147,6 +156,36 @@ app.get("/", (req, res) => {
 app.post("/upload", upload.single("doc"), (req, res) => {
     res.json({ file: req.file });
 })
+
+// To check the total number of documents.
+app.get("/documents", (req, res) => {
+    gfs.files.find().toArray((err, docs) => {
+        // If doc exist:
+        if (!docs || docs.length === 0) {
+            res.status(404).json({
+                err: "No such document exists "
+            })
+        }
+        return res.json(docs);
+    })
+})
+
+// To get individual file/document:
+app.get("/documents", (req, res) => {
+    gfs.files.find().toArray((err, docs) => {
+        // If doc exist:
+        if (!docs || docs.length === 0) {
+            res.status(404).json({
+                err: "No such document exists "
+            })
+        }
+        return res.json(docs);
+    })
+})
+
+
+
+
 
 app.get("/test_terminal", (req, res) => {
     res.render("testTerminal.ejs");
