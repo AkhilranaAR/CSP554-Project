@@ -9,6 +9,8 @@ const crypto = require('crypto');
 const multer = require('multer');
 const { GridFsStorage } = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
+const { assert } = require("console");
+// const e = require("express");
 // const Terminal = require("xterm");
 
 
@@ -34,7 +36,7 @@ mongoose.connect('mongodb://localhost:27017/grid_fs', {
 
 
 // For global scope:
-let gfs;
+let gfs, gridfsBucket, entireCollection;
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "Connection error:"));
@@ -42,8 +44,13 @@ db.once("open", () => {
     console.log("Database connection in ACTIVE");
     // Initializing GridFS Stream:
     console.log("Initializing GridFS Stream: ")
+    // For deprication warning of GridStore:
+    gridfsBucket = new mongoose.mongo.GridFSBucket(db.db, {
+        bucketName: "uploads"
+    });
     gfs = Grid(db.db, mongoose.mongo);
     gfs.collection("uploads");
+    entireCollection = gfs.collection("uploads");
 });
 // The .on() is Node.js thing and not specifically mongoose thing.
 // Both .on and .once are attached to listenerEvents().
@@ -141,7 +148,7 @@ app.get("/files/:id2", wrapAsync(async (req, res, next) => {
 
 
 app.get("/file_uploads", (req, res) => {
-    res.render("index.ejs");
+    res.render("index2.ejs");
 })
 
 
@@ -150,14 +157,54 @@ app.get("/file_uploads", (req, res) => {
 
 // Testing routes:
 app.get("/", (req, res) => {
-    res.render("test.ejs");
+    // res.render("test.ejs");
+    let data_list_array = [];
+    entireCollection.find({}).toArray(function (err, data_list) {
+        // assert.strictEqual(err, null);
+        // res.json(data_list);
+        for (let data of data_list) {
+            console.log(data);
+            // data_list_array.push(JSON.parse(data));
+            data_list_array.push(data);
+        }
+        // data_list_var = data_list.json();
+        // console.log(data_list_array);
+        // res.render("chunks", { "chunks": data_list });
+    });
+
+    gfs.files.find().toArray((err, docs) => {
+        // If doc exist:
+        if (!docs || docs.length === 0) {
+            res.render("test.ejs", {
+                docs: false,
+                chunks: data_list_array
+            });
+        } else {
+            docs.map((doc) => {
+                if (doc.contentType === "image/jpeg" || doc.contentType === "image/png") {
+                    doc.isImage = true;
+                } else {
+                    doc.isImage = false;
+                }
+            });
+            res.render("test.ejs", {
+                docs: docs,
+                chunks: data_list_array
+            })
+        }
+    })
 })
 
+// POST
+// @desc uploading photos
 app.post("/upload", upload.single("doc"), (req, res) => {
-    res.json({ file: req.file });
+    // No need to show the uploaded files' json here.
+    // res.json({ file: req.file });
+    res.redirect('/');
 })
 
-// To check the total number of documents.
+// GET:
+// @desc To check the total number of documents.
 app.get("/documents", (req, res) => {
     gfs.files.find().toArray((err, docs) => {
         // If doc exist:
@@ -170,9 +217,9 @@ app.get("/documents", (req, res) => {
     })
 })
 
-// To get individual file/document:
-app.get("/documents", (req, res) => {
-    gfs.files.find().toArray((err, docs) => {
+// @desc To get individual file/document:
+app.get("/documents/:docName", (req, res) => {
+    gfs.files.findOne({ filename: req.params.docName }, (err, docs) => {
         // If doc exist:
         if (!docs || docs.length === 0) {
             res.status(404).json({
@@ -183,9 +230,37 @@ app.get("/documents", (req, res) => {
     })
 })
 
+// @desc Display Images:
+app.get("/image/:docName", (req, res) => {
+    gfs.files.findOne({ filename: req.params.docName }, (err, docs) => {
+        // If doc exist:
+        if (!docs || docs.length === 0) {
+            res.status(404).json({
+                err: "No such document exists "
+            });
+        }
+        // Not just a json object. Return an image:
+        // return res.json(docs);
+        if (docs.contentType === "image/jpeg" || docs.contentType === "img/png") {
+            // createReadStream of GridFS stream.
+            const readstream = gridfsBucket.openDownloadStream(docs._id);
+            readstream.pipe(res);
+        } else {
+            res.status(404).json({
+                err: "Not an image"
+            });
+        }
+    })
+})
 
 
-
+app.get("/testDataObjects", (req, res) => {
+    entireCollection.find({}).toArray(function (err, data_list) {
+        // assert.strictEqual(err, null);
+        // res.json(data_list);
+        res.render("chunks", { "chunks": data_list });
+    });
+})
 
 app.get("/test_terminal", (req, res) => {
     res.render("testTerminal.ejs");
