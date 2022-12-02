@@ -163,7 +163,8 @@ app.get("/", (req, res) => {
         // assert.strictEqual(err, null);
         // res.json(data_list);
         for (let data of data_list) {
-            console.log(data);
+            // This is displaying json on the server: Working:
+            // console.log(data);
             // data_list_array.push(JSON.parse(data));
             data_list_array.push(data);
         }
@@ -259,6 +260,18 @@ app.get("/testDataObjects", (req, res) => {
         // assert.strictEqual(err, null);
         // res.json(data_list);
         res.render("chunks", { "chunks": data_list });
+    });
+})
+
+// @route DELETE route
+// @desc  Delete document
+app.delete("/documents/:id", (req, res) => {
+    gfs.remove({ _id: req.params.id, root: 'uploads' }, (err, gridStore) => {
+        if (err) {
+            return res.status(404).json({ err: err });
+        }
+
+        res.redirect('/');
     });
 })
 
