@@ -99,49 +99,49 @@ We can access the entire codebase by clicking on the project repository being ho
 Working
 The user uploads the image through a form and the document is stored in the database with the following object structure. Storage engine along with gridfs-stream breaks the document into chunks and files whose data is stored in these individual objects. Also, this information is stored and can be viewed simultaneously on the right window named metadata. These are the objects that are tracked when the user retrieves the document. One chunk follows the other and so on. The advantage of GridFS is realised when the user wants to store user-generated file content and wants to access portions of file content through chunks. The length method of this object displays the size of the document in bytes and can be changed through multer-storage engine i.e.,  ,5crypto module. 
  
-![title](Images/Screenshot_2022-12-02_at_11.53.09_PM)
+![title](Images/Screenshot_2022-12-02_at_11.53.09_PM.png)
 Figure 7: Code snippet of the object schema stored through gridfs-stream.
  
-![title](Images/Screenshot_2022-12-03_at_11.54.53_AM)
+![title](Images/Screenshot_2022-12-03_at_11.54.53_AM.png)
 Figure 8: Screengrab of the metadata displayed on the homepage.
 
 The application also supports various routes for different implementations such as displaying all the documents in the database, displaying specific image filtered by the file name which is generated and encrypted by the crypto plugin. The running application can be found on GitHub (https://github.com/AkhilranaAR/CSP554-Project) and a couple of screenshots are provided here for reference as well. Also, I’ve created a demo run of the application while the server is running under the Demo folder on the repo. Please feel free to view the application in action. 
  
-![title](Images/Screenshot_2022-12-03_at_12.04.25_AM)
+![title](Images/Screenshot_2022-12-03_at_12.04.25_AM.png)
 Figure 9: Screengrab of the application.
  
-![title](Images/Screenshot_2022-12-03_at_12.05.21_AM)
+![title](Images/Screenshot_2022-12-03_at_12.05.21_AM.png)
 Figure 10: Screengrab of the application.
 
 
 Running Servers
 The command for nodemon is nodemon app.js and will run the express server on localhost, port 8081. If successful, we’ll get the following messages logged in the terminal window:
  
-![title](Images/Screenshot_2022-12-03_at_2.00.36_PM)
+![title](Images/Screenshot_2022-12-03_at_2.00.36_PM.png)
 Figure 11: Initiating nodemon.
 
 We need to make sure our mongo server is also running by issuing the following command:
  
-![title](Images/Screenshot_2022-12-03_at_2.01.53_PM)
+![title](Images/Screenshot_2022-12-03_at_2.01.53_PM.png)
 Figure 12: Starting mongodb.
 
 Also, we can verify the documents being stored by logging into the mongodb database and looking up the records inside the specific collection or bucket. Be careful while accessing the chunks of a collection as an image is divided into numerous number of chunks which in turn is the biggest advantage of using GridFS and its core principle. Each of these chunks point to the next one hence making it efficient on document retrieval. 
  
-![title](Images/Screenshot_2022-12-03_at_11.47.26_AM)
+![title](Images/Screenshot_2022-12-03_at_11.47.26_AM.png)
 Figure 13: Initiating mongo shell.
  
-![title](Images/Screenshot_2022-12-03_at_11.48.05_AM)
+![title](Images/Screenshot_2022-12-03_at_11.48.05_AM.png)
 Figure 14: Selecting the correct collection inside the db.
  
-![title](Images/Screenshot_2022-12-03_at_11.48.15_AM)
+![title](Images/Screenshot_2022-12-03_at_11.48.15_AM.png)
 Figure 15: Chunks representation of the documents under uploads collection.
  
-![title](Images/Screenshot_2022-12-03_at_11.48.25_AM)
+![title](Images/Screenshot_2022-12-03_at_11.48.25_AM.png)
 Figure 16: Chunks representation of the documents under uploads collection .
 
 Finally, we have the git version control system tracking our changes to the files inside the main directory.
  
-![title](Images/Screenshot_2022-12-03_at_11.53.24_AM)
+![title](Images/Screenshot_2022-12-03_at_11.53.24_AM.png)
 Figure 17: git logs and commands.
 GitHub Repository Link
 We can access the entire codebase by clicking on the project repository being hosted on GitHub. The repository link is: https://github.com/AkhilranaAR/CSP554-Project. I’ve also uploaded a short demonstration run of the application on the repository as a dry run but feel free to download the application to run it locally.
