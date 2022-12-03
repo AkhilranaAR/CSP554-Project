@@ -265,12 +265,12 @@ app.get("/testDataObjects", (req, res) => {
 
 // @route DELETE route
 // @desc  Delete document
-app.delete("/documents/:id", (req, res) => {
-    gfs.remove({ _id: req.params.id, root: 'uploads' }, (err, gridStore) => {
+app.delete("/documents/:docName", (req, res) => {
+    gfs.remove({ filename: req.params.docName, root: 'uploads' }, (err, gridStore) => {
         if (err) {
             return res.status(404).json({ err: err });
         }
-
+        console.log('Delete Successful');
         res.redirect('/');
     });
 })
