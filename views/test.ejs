@@ -32,7 +32,7 @@
         <!-- <h1>Test .ejs file</h1> -->
 
         <div class="row">
-            <h1 class="fw-light text-center mb-5">GridFS Module</h1>
+            <h2 class="fw-light text-center mb-5">GridFS Module</h2>
 
             <div class="row">
                 <div class="col-6 offest-3 shadow p-3 mb-5 bg-white rounded">
@@ -77,22 +77,43 @@
 
                 <div class="col-6 mb-5">
                     <div class="form-floating shadow">
-                        <textarea class="form-control" placeholder="Document metadata" id="floatingTextarea2"
-                            style="height: 450px">
-
+                        <textarea class="form-control text-wrap fs-6 fw-light" placeholder="Document metadata"
+                            id="floatingTextarea2" style="height: 450px">
                             <% for(let chunk of chunks) { %>
-                                <p><%= chunk.length %> </p>
+                                {
+                                    "_id": "<%=chunk._id%>",
+                                    "length": <%=chunk.length%>,
+                                    "chunkSize": <%=chunk.chunkSize%>,
+                                    "uploadDate": "<%=chunk.uploadDate%>",
+                                    "filename": "<%=chunk.filename%>",
+                                    "contentType": "<%=chunk.contentType%>"
+                                }
                             
                             <% } %>
-
+                            
                             </textarea>
                         <label for="floatingTextarea2">Metadata</label>
                     </div>
                 </div>
             </div>
 
+            <div class=" offest-3 shadow p-3 mb-5 bg-white rounded">
+                <div class="container">
+                    <div class="row">
+                        <p class="fw-normal fs-4">More routes:</p>
+                        <div class="col fw-light fs-5">/testDataObjects</div>
+                        <div class="col fw-light fs-5">/image/:docName</div>
+                        <div class="col fw-light fs-5">/documents/:docName</div>
+                        <div class="col fw-light fs-5">/documents</div>
+                    </div>
+                </div>
+            </div>
 
-            <hr>
+
+            <h2 class="fw-light text-center mb-4">
+                Sample Image Testcases</h2>
+            <div class="border-bottom border-danger border-1 mb-4"></div>
+
 
             <% if(docs){ %>
                 <% docs.forEach(function(doc) { %>
@@ -109,7 +130,7 @@
                             <% } else { %>
                                 <%= doc.filename %>
                                     <% } %>
-                                        <form method="POST" action="/documents/<%= doc._id %>?_method=DELETE">
+                                        <form method="POST" action="/documents/<%= doc.filename %>?_method=DELETE">
                                             <button class="btn btn-danger btn-block mt-4">Delete</button>
                                             <button type="button"
                                                 onclick="window.location.href='http://www.unsplash.com';"
