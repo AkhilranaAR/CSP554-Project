@@ -1,4 +1,8 @@
+## Steps to run the application:
 
+1. Download the project from the repository.
+2. Open the project folder through terminal and run `npm install`. This will install the required dependencies.
+3. If you have node or nodemon installed, just proceed to executing `node app.js` or `nodemon app.js`. This will initiate the express server on port 8081. Go to your browser and run the application on `localhost:8081`.
 
 
 
